@@ -1,9 +1,4 @@
 # -*- coding: utf-8 -*-
-#!/usr/bin/env python
-'''
-By Dabi Ahn. andabi412@gmail.com.
-https://www.github.com/andabi
-'''
 
 import librosa
 import numpy as np
@@ -17,7 +12,7 @@ def closest_power_of_two(target):
             if (2 ** i >= target):
                 pwr = 2 ** i
                 break
-        if abs(pwr - target) < abs(pwr/2 - target):
+        if abs(pwr - target) < abs(pwr / 2 - target):
             return pwr
         else:
             return int(pwr / 2)
@@ -65,34 +60,20 @@ def to_wav_mag_only(mag, init_phase, len_frame=ModelConfig.L_FRAME, len_hop=Mode
                 p: griffin_lim(m, len_frame, len_hop, num_iters=num_iters, phase_angle=p),
                 list(zip(mag, init_phase))[1])))
 
-# Batch considered
-
-
 def get_magnitude(stft_matrixes):
     print(stft_matrixes.shape)
     return np.abs(stft_matrixes)
 
-# Batch considered
-
-
 def get_phase(stft_maxtrixes):
     return np.angle(stft_maxtrixes)
 
-# Batch considered
-
-
 def get_stft_matrix(magnitudes, phases):
     return magnitudes * np.exp(1.j * phases)
-
-# Batch considered
 
 
 def soft_time_freq_mask(target_src, remaining_src):
     mask = np.abs(target_src) / (np.abs(target_src) + np.abs(remaining_src) + np.finfo(float).eps)
     return mask
-
-# Batch considered
-
 
 def hard_time_freq_mask(target_src, remaining_src):
     mask = np.where(target_src > remaining_src, 1., 0.)
@@ -117,6 +98,7 @@ def griffin_lim(mag, len_frame, len_hop, num_iters, phase_angle=None, length=Non
             spec = get_stft_matrix(mag, phase_angle)
     return wav
 
+
 '''
 to reformat each song into 4-frame batch.
 Each song should have a file with all its 4-frame batch
@@ -133,7 +115,6 @@ def spec_to_batch(mixed_magn, music_magn, voice_magn, filenames):
     mixed_src = pad_to_four_frame(mixed_magn)
     music_src = pad_to_four_frame(music_magn)
     voice_src = pad_to_four_frame(voice_magn)
-
 
     # prepare the folders for the outputs
     dirName1 = "./output"
@@ -160,7 +141,7 @@ def spec_to_batch(mixed_magn, music_magn, voice_magn, filenames):
 
     # loop each song and separate into 4-frame batch.
     for i in range(num_wavs):
-        save_filename = filenames[i].replace("dataset/","")
+        save_filename = filenames[i].replace("dataset/", "")
         # pick out one song
         one_mixed = np.array(mixed_src[i])
         # where the dimension should be 129(batches), 4 (frames), 513 (frequencies)

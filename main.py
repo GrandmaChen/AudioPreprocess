@@ -74,6 +74,7 @@ def extract(filenames):
         # sampled_wav = padded_wav
         sampled_wav = _sample_range(padded_wav)
         resultArray.append(sampled_wav)
+        
     all_raw = np.array(resultArray)
     # Above is equivalent to :
     # src1_src2 = np.array(list(map(lambda f: _sample_range(
@@ -90,14 +91,11 @@ def load_wav():
     for (root, dirs, files) in walk(PATH):
         allWavFiles.extend(['{}/{}'.format(root, f) for f in files if f.endswith(".wav")])
 
-        #
     allWavFiles = sorted(allWavFiles)
     # filenames_array = filenames
     mixed, music_raw, voice_raw = extract(allWavFiles)
+
     return mixed, music_raw, voice_raw, allWavFiles
-    # mixed, src1, src2 = extract(allWavFiles)
-    #wavfiles = random.sample(wavfiles, size)
-    #mixed, src1, src2 = get_random_wav(wavfiles, sec, ModelConfig.SR)
 
 
 def convert_raw_audio(mixed, music_raw, voice_raw, filenames):
